@@ -1,0 +1,9 @@
+C:\Users\pc\source\repos\LEDDisplay\LEDDisplay\bin\Debug\LEDDisplay.dll
+C:\Users\pc\source\repos\LEDDisplay\LEDDisplay\bin\Debug\LEDDisplay.pdb
+C:\Users\pc\source\repos\LEDDisplay\LEDDisplay\obj\Debug\LEDDisplay.csprojAssemblyReference.cache
+C:\Users\pc\source\repos\LEDDisplay\LEDDisplay\obj\Debug\LEDDisplay.Display.resources
+C:\Users\pc\source\repos\LEDDisplay\LEDDisplay\obj\Debug\LEDDisplay.csproj.GenerateResource.cache
+C:\Users\pc\source\repos\LEDDisplay\LEDDisplay\obj\Debug\LEDDisplay.csproj.CoreCompileInputs.cache
+C:\Users\pc\source\repos\LEDDisplay\LEDDisplay\obj\Debug\LEDDisplay.dll
+C:\Users\pc\source\repos\LEDDisplay\LEDDisplay\obj\Debug\LEDDisplay.pdb
+C:\Users\pc\source\repos\LEDDisplay\LEDDisplay\obj\Debug\LEDDisplay.UserControl1.resources
