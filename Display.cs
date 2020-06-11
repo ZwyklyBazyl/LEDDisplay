@@ -37,7 +37,7 @@ namespace LEDDisplay
 
         public void Init()
         {
-            if (!IsComponentInitable) return;
+            if (!IsComponentInitable()) return;
 
             SetProperties();
 
