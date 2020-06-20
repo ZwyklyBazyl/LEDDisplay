@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,27 +18,134 @@ namespace LEDDisplay
 
         SolidBrush paintBrush = new SolidBrush(Color.Red);
 
-        public Color borderColor = Color.DarkBlue;
-
         public int actualXClearPos;
 
-        public string text = "LCBLA";
+        [Browsable(true), Category("Data")]
+        public Color TextColor
+        {
 
-        public int speed;
+            get { return textColor; }
+            set {
+                textColor = value;
+                Init();
+            }
+        }
 
-        public int tickRate;
+        private Color textColor = Color.Red;
+
+        [Browsable(true), Category("Data")]
+        public Color BorderColor
+        {
+
+            get { return borderColor; }
+            set
+            {
+                borderColor = value;
+                Init();
+            }
+        }
+
+        private Color borderColor = Color.Blue;
+
+        [Browsable(true), Category("Data")]
+        public string DisplayText
+        {
+
+            get { return text; }
+            set
+            {
+                text = value;
+                Init();
+            }
+        }
+
+        private string text = "LCBLA";
+
+        [Browsable(true), Category("Data")]
+        public bool MoveRight
+        {
+            get { return moveRight; }
+            set { moveRight = value;
+                if (moveRight)
+                {
+                    speed = 1;
+                }
+                else
+                {
+                    speed = -1;
+                }
+            }
+        }
+        private bool moveRight = true;
+
+        private int speed;
+
+        [Browsable(true), Category("Data")]
+        public int LettersSpacing
+        {
+            get { return lettersSpacing; }
+            set { lettersSpacing = value;
+                Init();
+            }
+        }
+        private int lettersSpacing = 20;
+
+        [Browsable(true), Category("Data")]
+        public int LettersSize
+        {
+            get { return lettersSize; }
+            set { lettersSize = value;
+                Init();
+            }
+        }
+        private int lettersSize = 10;
+
+
+        [Browsable(true), Category("Data")]
+        public int PanelWidth
+        {
+            get { return panelWidth; }
+            set { panelWidth = value;
+
+                panel1.CreateGraphics().Clear(Color.White);
+                panel1.Width = value;
+            }
+        }
+        private int panelWidth = 533;
+
+        [Browsable(true), Category("Data")]
+        public int PanelHeight
+        {
+            get { return panelHeight; }
+            set { panelHeight = value;
+
+                panel1.CreateGraphics().Clear(Color.White);
+                panel1.Height = value;
+            }
+        }
+        private int panelHeight = 100;
+
+        [Browsable(true), Category("Data")]
+        public int TickRate
+        {
+            get { return tickRate; }
+            set { tickRate = value;
+                timer1.Interval = tickRate;
+            }
+        }
+        private int tickRate = 1000;
 
         public Letters letters = new Letters();
 
         public Display()
         {
             InitializeComponent();
+            Init();
         }
 
 
         public void Init()
         {
-            if (!IsComponentInitable()) return;
 
             SetProperties();
 
@@ -46,69 +154,20 @@ namespace LEDDisplay
             panel1.CreateGraphics().Clear(Color.White);
 
             GetLetters();
-
-            timer1.Enabled = true;
-            timer1.Interval = tickRate;
         }
 
         private void SetProperties()
         {
-            letters.width = Int32.Parse(textBox2.Text);
-            letters.height = Int32.Parse(textBox2.Text);
+            letters.width = lettersSize;
+            letters.height = lettersSize;
 
-            letters.xPos = Int32.Parse(textBox4.Text);
-            letters.yPos = Int32.Parse(textBox4.Text);
+            if (LettersSize * 2 > LettersSpacing) LettersSpacing = LettersSize * 2;
 
-            panel1.Width = Int32.Parse(textBox6.Text);
-            panel1.Height = Int32.Parse(textBox5.Text);
+            letters.xPos = lettersSpacing;
+            letters.yPos = lettersSpacing;
 
-            text = textBox1.Text.ToUpper();
-
-            if (checkBox1.Checked)
-            {
-                speed = -1;
-            }
-            else
-            {
-                speed = 1;
-            }
-
-            tickRate = Int32.Parse(textBox3.Text);
-        }
-
-        private bool IsComponentInitable()
-        {
-            if (textBox1.Text == "" || textBox2.Text == "" || textBox3.Text == "" || textBox4.Text == "" || textBox5.Text == "" || textBox6.Text == "")
-            {
-                MessageBox.Show("Wypełnij wszystkie komórki", "Error Title", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            if (Int32.Parse(textBox2.Text) < 0)
-            {
-                MessageBox.Show("Wielkość musi być nieujemna", "Error Title", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            if (Int32.Parse(textBox4.Text) < 2 * Int32.Parse(textBox2.Text))
-            {
-                MessageBox.Show("Odstępy musząbyć conajmniej 2 razy większe od wielkości", "Error Title", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            if (Int32.Parse(textBox5.Text) <= 0)
-            {
-                MessageBox.Show("Szerokość wyświetlacza musi być dodatnia", "Error Title", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            if (Int32.Parse(textBox6.Text) <= 0)
-            {
-                MessageBox.Show("Wysokość wyświetlacza musi być dodatnia", "Error Title", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            return true;
+            paintBrush.Color = textColor;
+            letters.paintColor = textColor;
         }
 
         private void GetLetters()
@@ -195,44 +254,9 @@ namespace LEDDisplay
             }
         }
 
-        private void timer1_Tick_1(object sender, EventArgs e)
+        private void timer1_Tick(object sender, EventArgs e)
         {
             Draw(speed);
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            Init();
-        }
-
-        private void checkBox2_Click_1(object sender, EventArgs e)
-        {
-            checkBox1.Checked = !checkBox2.Checked;
-        }
-
-        private void checkBox1_Click_1(object sender, EventArgs e)
-        {
-            checkBox2.Checked = !checkBox1.Checked;
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            letters.OpenColorPicker();
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            OpenColorPicker();
         }
 
         public void OpenColorPicker()
@@ -248,21 +272,6 @@ namespace LEDDisplay
             // Update the text box color if the user clicks OK 
             if (colorPicker.ShowDialog() == DialogResult.OK)
                 borderColor = colorPicker.Color;
-        }
-
-        private void label7_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox6_TextChanged(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void textBox5_TextChanged(object sender, EventArgs e)
-        {
-           
         }
     }
 
